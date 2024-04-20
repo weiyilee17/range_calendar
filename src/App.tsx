@@ -1,5 +1,11 @@
+import RangeCalendar from './components/RangeCalendar';
+
 function App() {
-  return <>hi</>;
+  return (
+    <>
+      <RangeCalendar currentMonthOnly />
+    </>
+  );
 }
 
 export default App;

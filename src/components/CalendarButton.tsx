@@ -1,0 +1,30 @@
+import { PropsWithChildren } from 'react';
+
+import type { Button, CurrentMonthOnly, Today } from '../lib/common.types';
+import { cn } from '../lib/utils';
+
+type CalendarButton = PropsWithChildren & CurrentMonthOnly & Button & Today;
+
+function CalendarButton({
+  today,
+  children,
+  currentMonthOnly,
+  onButtonClick,
+}: CalendarButton) {
+  return (
+    <button
+      disabled={currentMonthOnly}
+      className={cn(
+        'flex size-[44px] cursor-pointer items-center justify-center bg-white hover:bg-[#e6e6e6]',
+        {
+          'cursor-not-allowed': currentMonthOnly,
+        },
+      )}
+      onClick={() => onButtonClick(today)}
+    >
+      {children}
+    </button>
+  );
+}
+
+export default CalendarButton;
