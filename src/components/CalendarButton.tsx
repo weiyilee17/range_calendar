@@ -3,13 +3,19 @@ import { PropsWithChildren } from 'react';
 import type { Button, CurrentMonthOnly, Today } from '../lib/common.types';
 import { cn } from '../lib/utils';
 
-type CalendarButton = PropsWithChildren & CurrentMonthOnly & Button & Today;
+type CalendarButton = PropsWithChildren &
+  CurrentMonthOnly &
+  Button &
+  Today & {
+    label: string;
+  };
 
 function CalendarButton({
   today,
   children,
   currentMonthOnly,
   onButtonClick,
+  label,
 }: CalendarButton) {
   return (
     <button
@@ -21,6 +27,7 @@ function CalendarButton({
         },
       )}
       onClick={() => onButtonClick(today)}
+      aria-label={label}
     >
       {children}
     </button>

@@ -8,6 +8,7 @@ import {
   isAfter,
   subMonths,
   addMonths,
+  isSameDay,
 } from 'date-fns';
 import { useState } from 'react';
 
@@ -52,7 +53,7 @@ function RangeCalendar({
       return;
     }
 
-    if (isAfter(singleDay, rangeStart)) {
+    if (isAfter(singleDay, rangeStart) || isSameDay(singleDay, rangeStart)) {
       setRangeEnd(singleDay);
     } else {
       setRangeStart(null);
@@ -61,7 +62,7 @@ function RangeCalendar({
   };
 
   return (
-    <div className="flex h-[240px] w-[350px] flex-col">
+    <div className="flex h-[240px] w-[350px] flex-col text-base">
       <Header
         today={today}
         currentMonthOnly={currentMonthOnly}

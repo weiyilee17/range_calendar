@@ -59,6 +59,7 @@ function CalendarCell({
         },
       )}
       onClick={() => onButtonClick(targetDate)}
+      aria-label={format(targetDate, 'P')}
     >
       {format(targetDate, 'do', {
         locale: zhTW,

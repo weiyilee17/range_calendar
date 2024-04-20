@@ -22,6 +22,7 @@ function Header({
         today={today}
         currentMonthOnly={currentMonthOnly}
         onButtonClick={onPrevButtonClick}
+        label="prev-month"
       >
         <ChevronLeft />
       </CalendarButton>
@@ -34,6 +35,7 @@ function Header({
         today={today}
         currentMonthOnly={currentMonthOnly}
         onButtonClick={onNextButtonClick}
+        label="next-month"
       >
         <ChevronRight />
       </CalendarButton>
