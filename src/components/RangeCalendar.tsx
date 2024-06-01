@@ -18,20 +18,27 @@ import CalendarCell from './CalendarCell';
 import type {
   CurrentDate,
   CurrentMonthOnly,
+  SingleDateSelection,
   OptionalDate,
 } from '../lib/common.types';
 
-type RangeCalendar = CurrentDate & CurrentMonthOnly;
+type RangeCalendar = CurrentDate &
+  CurrentMonthOnly &
+  Partial<SingleDateSelection>;
 
 function RangeCalendar({
   currentMonthOnly = false,
   currentDate = new Date(),
+  singleDateSelection = false,
+  multipleDates = false,
 }: RangeCalendar) {
   const [today, setToday] = useState(currentDate);
 
   const [rangeStart, setRangeStart] = useState<OptionalDate>(null);
 
   const [rangeEnd, setRangeEnd] = useState<OptionalDate>(null);
+
+  const [singleSelectedDates, setSingleSelectedDates] = useState<Date[]>([]);
 
   const firstDayOfMonth = startOfMonth(today);
   const lastDayOfMonth = endOfMonth(today);
@@ -44,11 +51,31 @@ function RangeCalendar({
   const handlePrevMonthClick = () => {
     setToday(subMonths(today, 1));
   };
+
   const handleNextMonthClick = () => {
     setToday(addMonths(today, 1));
   };
 
-  const handleDateClick = (singleDay: Date) => {
+  const handleSingleDateSelectClick = (singleDate: Date) => {
+    if (singleSelectedDates.some((date) => isSameDay(date, singleDate))) {
+      setSingleSelectedDates((prev) =>
+        prev.filter((date) => !isSameDay(date, singleDate)),
+      );
+      return;
+    }
+
+    if (currentMonthOnly && !isSameMonth(today, singleDate)) {
+      return;
+    }
+
+    if (multipleDates) {
+      setSingleSelectedDates((prev) => prev.concat(singleDate));
+    } else {
+      setSingleSelectedDates([singleDate]);
+    }
+  };
+
+  const handleRangeDateClick = (singleDay: Date) => {
     if (currentMonthOnly && !isSameMonth(today, singleDay)) {
       return;
     }
@@ -84,7 +111,14 @@ function RangeCalendar({
             key={index}
             rangeStart={rangeStart}
             rangeEnd={rangeEnd}
-            onButtonClick={handleDateClick}
+            onButtonClick={
+              singleDateSelection
+                ? handleSingleDateSelectClick
+                : handleRangeDateClick
+            }
+            singleDateSelection={singleDateSelection}
+            multipleDates={multipleDates}
+            singleSelectedDates={singleSelectedDates}
           />
         ))}
       </div>

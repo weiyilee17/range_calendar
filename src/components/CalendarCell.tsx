@@ -12,6 +12,7 @@ import type {
   CurrentMonthOnly,
   OptionalDate,
   Button,
+  SingleDateSelection,
 } from '../lib/common.types';
 import { cn } from '../lib/utils';
 
@@ -21,7 +22,8 @@ type CalendarCell = CurrentMonthOnly &
     targetDate: Date;
     rangeStart: OptionalDate;
     rangeEnd: OptionalDate;
-  };
+    singleSelectedDates: Date[];
+  } & SingleDateSelection;
 
 function CalendarCell({
   currentMonthOnly,
@@ -30,8 +32,21 @@ function CalendarCell({
   rangeStart,
   rangeEnd,
   onButtonClick,
+  singleDateSelection,
+  multipleDates,
+  singleSelectedDates,
 }: CalendarCell) {
-  const blueClassCondition = (singleDay: Date) => {
+  const singleDateSelectBlueClassCondition = (singleDay: Date) => {
+    if (!multipleDates) {
+      return singleSelectedDates.length
+        ? isSameDay(singleDay, singleSelectedDates[0])
+        : false;
+    }
+
+    return singleSelectedDates.some((date) => isSameDay(date, singleDay));
+  };
+
+  const rangeBlueClassCondition = (singleDay: Date) => {
     if (!rangeStart) {
       return false;
     }
@@ -45,6 +60,7 @@ function CalendarCell({
       end: rangeEnd,
     });
   };
+
   return (
     <div
       className={cn(
@@ -53,8 +69,12 @@ function CalendarCell({
           'cursor-not-allowed':
             currentMonthOnly && !isSameMonth(targetDate, today),
           'text-[#757575]': !isSameMonth(targetDate, today),
-          'text-white': blueClassCondition(targetDate),
-          'bg-[#006edc]': blueClassCondition(targetDate),
+          'text-white': singleDateSelection
+            ? singleDateSelectBlueClassCondition(targetDate)
+            : rangeBlueClassCondition(targetDate),
+          'bg-[#006edc]': singleDateSelection
+            ? singleDateSelectBlueClassCondition(targetDate)
+            : rangeBlueClassCondition(targetDate),
           'bg-[#ffff76]': isToday(targetDate),
         },
       )}

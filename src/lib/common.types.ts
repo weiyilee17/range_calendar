@@ -10,6 +10,11 @@ export type CurrentDate = {
   currentDate?: Date;
 };
 
+export type SingleDateSelection = {
+  singleDateSelection: boolean;
+  multipleDates: boolean;
+};
+
 export type Button = {
   onButtonClick: (day: Date) => void;
 };
