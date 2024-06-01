@@ -9,6 +9,7 @@ import {
   subMonths,
   addMonths,
   isSameDay,
+  isSameMonth,
 } from 'date-fns';
 import { useState } from 'react';
 
@@ -48,6 +49,10 @@ function RangeCalendar({
   };
 
   const handleDateClick = (singleDay: Date) => {
+    if (currentMonthOnly && !isSameMonth(today, singleDay)) {
+      return;
+    }
+
     if (!rangeStart) {
       setRangeStart(singleDay);
       return;
